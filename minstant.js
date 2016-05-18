@@ -79,6 +79,15 @@ if (Meteor.isClient) {
       return ""
     }, 
   })
+  
+  Template.chat_message.helpers({
+    getUserProfile: function(userId){
+      var user = Meteor.users
+        .findOne({_id: userId});
+        
+      return user.profile;
+    }  
+  })
 
   Template.chat_page.events({
 
@@ -100,7 +109,8 @@ if (Meteor.isClient) {
         // is a good idea to insert data straight from the form
         // (i.e. the user) into the database?? certainly not. 
         // push adds the message to the end of the array
-        msgs.push({text: event.target.chat.value});
+        msgs.push({text: event.target.chat.value,
+          senderId: Meteor.userId()});
         
         // reset the form
         event.target.chat.value = "";
