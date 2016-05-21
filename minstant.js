@@ -2,6 +2,9 @@ Chats = new Mongo.Collection("chats");
 
 if (Meteor.isClient) {
 
+  Meteor.subscribe("users");  
+  Meteor.subscribe("chats");
+
   // set up the main template the the router will use to build pages
   Router.configure({
   layoutTemplate: 'ApplicationLayout'
@@ -112,6 +115,18 @@ if (Meteor.isClient) {
 // users have the username 'user1@test.com' .. 'user8@test.com'
 // and the password test123
 if (Meteor.isServer) {
+  
+  Meteor.publish("users", function(){
+    return Meteor.users.find();
+  });
+  
+  Meteor.publish("chats", function(){
+    return Chats.find({$or:[
+      {user1Id: this.userId},
+      {user2Id: this.userId}
+    ]});
+  });
+  
   Meteor.startup(function () {
     if (!Meteor.users.findOne()){
       for (var i=1; i<9; i++){
