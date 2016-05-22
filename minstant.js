@@ -31,8 +31,12 @@ if (Meteor.isClient) {
       {user2Id:Meteor.userId(), user1Id:otherUserId}
     ]};
     
+    console.log(filter);
+    
     var chat = Chats.findOne(filter);
     if (!chat){// no chat matching the filter - need to insert a new one
+      
+      console.log('No chat');
       
       var user1Id = Meteor.userId();
       var user2Id = otherUserId;
@@ -40,6 +44,9 @@ if (Meteor.isClient) {
       chatId = Meteor.call("createChat", user1Id, user2Id);
     }
     else {// there is a chat going already - use that. 
+      
+      console.log('have chat');
+      
       chatId = chat._id;
     }
       
